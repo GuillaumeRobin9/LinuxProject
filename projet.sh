@@ -6,7 +6,7 @@ SMTP_SERVER="your_smtp_server"
 SMTP_LOGIN="your_smtp_login"
 SMTP_PASSWORD="your_smtp_password"
 
-#-------------------------------------------------ACCOUNT CREATION-----------------------------a
+#-------------------------------------------------ACCOUNT CREATION----------------------------
 sed -i 1d accounts.csv # remove first line for Name Surname password etc ..
 mkdir /home/shared
 chmod +rx /home/shared #loop  for creating user 
