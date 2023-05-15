@@ -1,9 +1,11 @@
 #!/bin/bash
-#-------------------------------------------------VARIABLE DECLARATION----------------------------
+#-------------------------------------------------ARGUMENTS DECLARATION----------------------------
 
-SMTPServer="10.30.48.100" 
-SMTPLogin="SMTP_login" 
-SMTPPassword="SMTP_password" 
+SSH_server=$1
+SSH_username=$2
+SMTPLogin=$3
+SMTPPassword=$4
+
 
 #-------------------------------------------------ACCOUNT CREATION----------------------------
 #sed -i 1d accounts.csv # remove first line for Name Surname password etc ..
@@ -24,8 +26,8 @@ do
     echo "Your account as succesfully been created. You are $username and your password is : $password. Please change your password for security reason. Thank you !" | mail -s "this is an automatically generated email please do not reply" guillaume.robin@isen-ouest.yncrea.fr
     # send email --> server version
     #echo "Your account as succesfully been created. You are $username and your password is : $password. Please change your password for security reason. Thank you !" | mailx -v -r "$mailAdress" -s "this is an automatically generated email please do not reply" -S smtp="$SMTPServer" -S smtp-use-starttls -S smtp-auth=login -S smtp-auth-user="$SMTPLogin" -S smtp-auth-password="$SMTPPassword" -S ssl-verify=ignore "$mailAdress"
-    mail --subject "Do not reply" --exec "set sendmail=smtp://guillaume.robin@isen-ouest.yncrea.fr:<password>;@smtp-mail.outlook.com:587" --append "From:guillaume.robin@isen-ouest.yncrea.fr" mael.grellier-neau@isen-ouest.yncrea.fr <<< "Your account as succesfully been created. You are $username and your password is : $password. Please change your password for security reason. Thank you !"
-
+    #mail --subject "Do not reply" --exec "set sendmail=smtp://guillaume.robin@isen-ouest.yncrea.fr:<password>;@smtp-mail.outlook.com:587" --append "From:guillaume.robin@isen-ouest.yncrea.fr" mael.grellier-neau@isen-ouest.yncrea.fr <<< "Your account as succesfully been created. You are $username and your password is : $password. Please change your password for security reason. Thank you !"
+    mail --subject "Please do not reply" --exec "set sendmail=smtp://guillaume.robin%40isen-ouest.yncrea.fr:<password>;@smtp-mail.outlook.com:587" --append "From:guillaume.robin@isen-ouest.yncrea.fr" $mailAdress <<< "Your account as succesfully been created. You are $username and your password is : $password. Please change your password for security reason. Thank you !"
 done < accounts.csv
 
 # ----------------------------------------------------------SAUVEGARDE------------------------------------------- 
@@ -38,7 +40,7 @@ do
   sudo tar -czf "/home/$username/save_$username.tgz"  --directory="/home/$username/a_sauver" . 
 
 # server version with ssh
-ssh grobin25@10.30.48.100 'tar -zcvf /home/shared/$username/a_sauver_$username.tgz /home/shared/$username/a_sauver' # localisation destination
+ssh $SSH_username@$SSH_server 'tar -zcvf /home/shared/$username/a_sauver_$username.tgz /home/shared/$username/a_sauver' # localisation destination
 #ssh grobin25@10.30.48.100 'tar czf - /home/shared/$username/a_sauver_$username.tgz' | tar xvzf - -C /home/username  # localisation destination
 done < accounts.csv
 
@@ -77,8 +79,8 @@ flush privileges;
 exit;
 
 #server
-sudo ssh grobin25@10.30.48.100 'wget https://download.nextcloud.com/server/releases/nextcloud-22.0.0.zip && sudo apt install unzip -y && sudo apt-get install apache2 mariadb-server libapache2-mod-php7.4 php7.4-gd php7.4-json php7.4-mysql php7.4-curl php7.4-intl php7.4-mbstring php7.4-xml php7.4-zip php7.4-bz2 php-apcu redis-server -y && unzip nextcloud-22.0.0.zip && sudo mv nextcloud /var/www/html/ && sudo chown -R www-data:www-data /var/www/html/nextcloud/ && sudo apt install mariadb-server mariadb-client -y && sudo service mariadb start && sudo a2enmod php7.4 && sudo service apache2 restart && sudo mysql -e "CREATE DATABASE nextcloud; CREATE USER 'nextcloud-admin' IDENTIFIED BY 'N3x+_Cl0uD'; GRANT ALL PRIVILEGES ON nextcloud.* TO 'nextcloud-admin' IDENTIFIED BY 'N3x+_Cl0uD'; FLUSH PRIVILEGES;"'
-ssh -L 4242:localhost:4242 grobin25@10.30.48.100
+sudo $SSH_username@$SSH_server 'wget https://download.nextcloud.com/server/releases/nextcloud-22.0.0.zip && sudo apt install unzip -y && sudo apt-get install apache2 mariadb-server libapache2-mod-php7.4 php7.4-gd php7.4-json php7.4-mysql php7.4-curl php7.4-intl php7.4-mbstring php7.4-xml php7.4-zip php7.4-bz2 php-apcu redis-server -y && unzip nextcloud-22.0.0.zip && sudo mv nextcloud /var/www/html/ && sudo chown -R www-data:www-data /var/www/html/nextcloud/ && sudo apt install mariadb-server mariadb-client -y && sudo service mariadb start && sudo a2enmod php7.4 && sudo service apache2 restart && sudo mysql -e "CREATE DATABASE nextcloud; CREATE USER 'nextcloud-admin' IDENTIFIED BY 'N3x+_Cl0uD'; GRANT ALL PRIVILEGES ON nextcloud.* TO 'nextcloud-admin' IDENTIFIED BY 'N3x+_Cl0uD'; FLUSH PRIVILEGES;"'
+ssh -L 4242:localhost:4242 $SSH_username@$SSH_server
 
 
 
