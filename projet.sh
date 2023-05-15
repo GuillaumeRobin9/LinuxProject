@@ -29,19 +29,24 @@ done < accounts.csv
 
 # ----------------------------------------------------------SAUVEGARDE------------------------------------------- 
 #local version
-sudo tar -czf "/home/Atiffany/save_Atiffany.tgz"  --directory="/home/Atiffany/a_sauver" . 
+while read line
+do
+  first_name=$(echo "$line" | cut -d';' -f1) # take name column 1
+  last_name=$(echo "$line" | cut -d';' -f2) # take surname column 2
+  username="$(echo $first_name | head -c 1)${last_name}" # concatenation
+  sudo tar -czf "/home/$username/save_$username.tgz"  --directory="/home/$username/a_sauver" . 
 
-# tar -zcvf /home/shared/$USERNAME/a_sauver_$USERNAME.tgz /home/shared/$USERNAME/a_sauver # localisation destination 
 # server version with ssh
-ssh grobin25@10.30.48.100 'tar -zcvf /home/shared/$USERNAME/a_sauver_$USERNAME.tgz /home/shared/$USERNAME/a_sauver' # localisation destination
-ssh grobin25@10.30.48.100 'tar tar czf - /home/shared/$USERNAME/a_sauver_$USERNAME.tgz' | tar xvzf - -C /home/username  # localisation destination
-
+ssh grobin25@10.30.48.100 'tar -zcvf /home/shared/$username/a_sauver_$username.tgz /home/shared/$username/a_sauver' # localisation destination
+#ssh grobin25@10.30.48.100 'tar czf - /home/shared/$username/a_sauver_$username.tgz' | tar xvzf - -C /home/username  # localisation destination
+done < accounts.csv
 
 
 # ---------------------------------------------------ECPLISE INSTALLATION -------------------------------------------------
-wget -P eclipse/test https://rhlx01.hs-esslingen.de/pub/Mirrors/eclipse/oomph/epp/2023-03/R/eclipse-inst-jre-linux64.tar.gz
-tar -xvzf eclipse-inst-jre-linux64.tar.gz -C eclipse/
-sudo ln -s  /chemin/vers/destination/eclipse-latest eclipse # symbolic link to make it accessible to all user
+wget -P /home  https://rhlx01.hs-esslingen.de/pub/Mirrors/eclipse/oomph/epp/2023-03/R/eclipse-inst-jre-linux64.tar.gz
+cd ..
+sudo tar -xvzf eclipse-inst-jre-linux64.tar.gz 
+sudo ln -s  eclipse-installer /home/johndoe/ # symbolic link to make it accessible to all user
 
 # ---------------------------------------------------PARE FEU ------------------------------------------------------------
 sudo apt install ufw -y  # Uncomplicated Firewall
