@@ -76,18 +76,10 @@ grant all privileges on nextcloud.* to nextcloud-admin identified by N3x+_Cl0uD;
 flush privileges;
 exit;
 
-ssh -L 4242:localhost:80 nextcloud-admin@10.30.48.100
-
-
-
-#sudo -u www-data php /var/www/html/nextcloud/occ user:add --display-name="nextcloud-admin" --group="admin" nextcloud-admin N3x+_Cl0uD # create admin user
-
 
 #server
-#wget https://download.nextcloud.com/server/releases/nextcloud-22.0.0.zip
-#sudo apt install unzip -y
-#sudo scp 'nextcloud-22.0.0.zip' grobin25@10.30.48.100:/home/grobin25
-#ssh grobin25@10.30.48.100 "unzip /home/grobin25/nextcloud-22.0.0.zip"
-#ssh grobin25@10.30.48.100 "./home/grobin25/nextcloud-22.0.0.zip"
+sudo ssh grobin25@10.30.48.100 'wget https://download.nextcloud.com/server/releases/nextcloud-22.0.0.zip && sudo apt install unzip -y && sudo apt-get install apache2 mariadb-server libapache2-mod-php7.4 php7.4-gd php7.4-json php7.4-mysql php7.4-curl php7.4-intl php7.4-mbstring php7.4-xml php7.4-zip php7.4-bz2 php-apcu redis-server -y && unzip nextcloud-22.0.0.zip && sudo mv nextcloud /var/www/html/ && sudo chown -R www-data:www-data /var/www/html/nextcloud/ && sudo apt install mariadb-server mariadb-client -y && sudo service mariadb start && sudo a2enmod php7.4 && sudo service apache2 restart && sudo mysql -e "CREATE DATABASE nextcloud; CREATE USER 'nextcloud-admin' IDENTIFIED BY 'N3x+_Cl0uD'; GRANT ALL PRIVILEGES ON nextcloud.* TO 'nextcloud-admin' IDENTIFIED BY 'N3x+_Cl0uD'; FLUSH PRIVILEGES;"'
+ssh -L 4242:localhost:4242 grobin25@10.30.48.100
+
 
 
