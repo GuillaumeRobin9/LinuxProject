@@ -15,6 +15,8 @@ SMTPPassword=$(echo $4 | sed 's/\&/\\\&/g')
 SMTPPassword=$(echo $4 | sed 's/\@/\\\@/g')
 SMTPPassword=$(echo $4 | sed 's/\!/\\\!/g')
 
+
+
 #-------------------------------------------------ACCOUNT CREATION----------------------------
 #sed -i 1d accounts.csv # remove first line for Name Surname password etc ..
 #mkdir /home/shared
@@ -99,8 +101,8 @@ sudo ufw reload
 #exit;
 
 #server
-sudo ssh $SSH_username@$SSH_server 'wget https://download.nextcloud.com/server/releases/nextcloud-22.0.0.zip && sudo apt install unzip -y && sudo apt-get install apache2 mariadb-server libapache2-mod-php7.4 php7.4-gd php7.4-json php7.4-mysql php7.4-curl php7.4-intl php7.4-mbstring php7.4-xml php7.4-zip php7.4-bz2 php-apcu redis-server -y && unzip nextcloud-22.0.0.zip && sudo mv nextcloud /var/www/html/ && sudo chown -R www-data:www-data /var/www/html/nextcloud/ && sudo apt install mariadb-server mariadb-client -y && sudo service mariadb start && sudo a2enmod php7.4 && sudo service apache2 restart && sudo mysql -e "CREATE DATABASE nextcloud; CREATE USER 'nextcloud-admin' IDENTIFIED BY 'N3x+_Cl0uD'; GRANT ALL PRIVILEGES ON nextcloud.* TO 'nextcloud-admin' IDENTIFIED BY 'N3x+_Cl0uD'; FLUSH PRIVILEGES;"'
-ssh -L 4242:localhost:80 $SSH_username@$SSH_server >> /home/nextcloud_tunneling # tunneling
+#sudo ssh $SSH_username@$SSH_server 'wget https://download.nextcloud.com/server/releases/nextcloud-22.0.0.zip && sudo apt install unzip -y && sudo apt-get install apache2 mariadb-server libapache2-mod-php7.4 php7.4-gd php7.4-json php7.4-mysql php7.4-curl php7.4-intl php7.4-mbstring php7.4-xml php7.4-zip php7.4-bz2 php-apcu redis-server -y && unzip nextcloud-22.0.0.zip && sudo mv nextcloud /var/www/html/ && sudo chown -R www-data:www-data /var/www/html/nextcloud/ && sudo apt install mariadb-server mariadb-client -y && sudo service mariadb start && sudo a2enmod php7.4 && sudo service apache2 restart && sudo mysql -e "CREATE DATABASE nextcloud; CREATE USER 'nextcloud-admin' IDENTIFIED BY 'N3x+_Cl0uD'; GRANT ALL PRIVILEGES ON nextcloud.* TO 'nextcloud-admin' IDENTIFIED BY 'N3x+_Cl0uD'; FLUSH PRIVILEGES;"'
+#ssh -L 4242:localhost:80 $SSH_username@$SSH_server > /home/nextcloud_tunneling # tunneling
 #with snap 
 sudo ssh $SSH_username@$SSH_server 'apt install snap'
 sudo ssh $SSH_username@$SSH_server 'snap install nextcloud'
