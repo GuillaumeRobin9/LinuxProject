@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Installation de sysstat
+sudo apt-get install sysstat -y
 
+# Récupération de la date et de l'heure actuelles
+timestamp=$(date +"%Y%m%d_%H%M%S")
 
-sudo mailx -S smtp="$server" -r guirobin37@gmail.com -s "Account creation" -v "$mailAdress" < "Hello, your username is : "$username" and your password is : "$password". Please change your password for security reason. Thank you !"
+# Surveillance des ressources et enregistrement dans des fichiers
+echo "CPU Monitoring."
+mpstat -P ALL > monitoring_cpu_$timestamp.txt
+echo "Network Monitoring."
+sar -n DEV 1 1 > monitoring_network_$timestamp.txt
