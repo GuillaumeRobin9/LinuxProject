@@ -108,16 +108,17 @@ sudo ssh $SSH_username@$SSH_server 'sudo -u www-data php occ user:add'
 
 # ---------------------------------------------------MONITORING------------------------------------------------------------
 
-ssh $SSH_username@$SSH_server 'sudo apt install net-tools -y' # if config needed for network usage
-ssh $SSH_username@$SSH_server 'cpu_usage=$(top -bn1 | grep "Cpu(s)" | awk '{print $2 + $4}')
-memory_usage=$(free | grep Mem | awk '{printf "%.2f", $3/$2 * 100}')
-network_interface=$(ifconfig | awk '/^[a-z]/ {interface=$1} /inet / {print interface}')
-network_usage=$(ifconfig "$network_interface" | awk '/RX packets/ {print $6}')
-echo "CPU Usage: $cpu_usage%"
-echo "Memory Usage: $memory_usage%"
-echo "Network Usage: $network_usage"'
-
-# more detailled CPU prompt but don't show memory usage
-sudo apt-get install sysstat -y # install sysstat
-mpstat -P ALL # cpu usage
-# mpstat -A # more information
+ssh $SSH_username@$SSH_server '
+    sudo apt-get install sysstat -y
+    echo "CPU Monitoring."
+    mpstat -P ALL
+    echo "Network Monitoring."
+    sar -n DEV 1 1
+'
+ssh $SSH_username@$SSH_server 'sudo apt-get install sysstat -y'
+crontab -l > provCron
+#provisoire crontab
+echo '* * * * 1-5 ssh $SSH_username@$SSH_server "sudo bash -c '\''echo \"CPU Monitoring.\"; mpstat -P ALL; echo \"Network Monitoring.\"; sar -n DEV 1 1'\''"' >> provCron
+#merge cron file
+crontab provCron
+rm provCron
