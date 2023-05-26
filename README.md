@@ -6,7 +6,7 @@ Ce script permet donc de nombreuse action a travers l'usage d'un serveur distant
 
 L'objectif de ce projet était de créer un script prêt à être déployé peu importe la machine, permettant la création d'utilisateurs, une fonction de sauvegarde automatique, l'installation d'Eclipse et de Nextcloud, la modification des règles du pare-feu ainsi que le monitoring des ressources utilisées par la machine. Ce script permet donc de nombreuses actions à travers l'usage d'un serveur distant.
 # Préquis 
-Le script, s'il est exécuté avec des droits root, sera capable d'installer les dépendances requises par lui-même, telles que snapd, ufw, ou encore sysstat.
+Le script, s'il est exécuté avec des droits root, sera capable d'installer les dépendances requises par lui-même, telles que snapd, ufw, ou encore sysstat. Sinon il faudra que ses dépendances soient préinstallés
 # Arguments 
 Le script prend 4 arguments :
 1. l'adresse du serveur 
