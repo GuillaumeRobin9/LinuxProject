@@ -30,9 +30,9 @@ do
   password=$(echo "$line" | cut -d';' -f4) # take password column 4
   mailAdress=$(echo "$line" | cut -d';' -f3) # take mail  column 3
   sudo useradd -p $(openssl passwd -1 $password) $username -m -d /home/$username 2>/dev/null # no error message
-  sudo passwd -e $username 2>/dev/null # make password expire immediatly 
+  echo "The user $username has been created"
+  sudo passwd -e $username 1>/dev/null 2>/dev/null # make password expire immediatly 
   mkdir /home/$username/a_sauver_$username 2>/dev/null # create folder for backup
-  echo "$username"
     # send email --> local version 
     echo "Your account as succesfully been created. You are $username and your password is : $password. Please change your password for security reason. Thank you !" | mail -s "this is an automatically generated email please do not reply" guillaume.robin@isen-ouest.yncrea.fr
     # send email --> server version
@@ -104,16 +104,25 @@ sudo ssh $SSH_username@$SSH_server 'apt install snapd -y'
 sudo ssh $SSH_username@$SSH_server 'snap install nextcloud'
 sudo ssh $SSH_username@$SSH_server 'nextcloud.manual-install nextcloud-admin N3x+_Cl0uD'
 sudo ssh $SSH_username@$SSH_server 'sudo -u www-data php occ user:add'
-
+while read line
+do
+  first_name=$(echo "$line" | cut -d';' -f1) # take name column 1
+  last_name=$(echo "$line" | cut -d';' -f2) # take surname column 2
+  username="$(echo $first_name | head -c 1)${last_name}" # concatenation
+  password=$(echo "$line" | cut -d';' -f4) # take password column 4
+  # add user to nextcloud from nexcloud occ documentation
+  ssh $SSH_username@$SSH_server "sudo -u www-data php occ user:add --password-from-env $password --display-name=$username"
+  done < accounts.csv
 
 # ---------------------------------------------------MONITORING------------------------------------------------------------
 
+# use sysstat/sar and mpstat to monitor CPU memory and network
 ssh $SSH_username@$SSH_server '
     sudo apt-get install sysstat -y
     echo "CPU Monitoring."
     mpstat -P ALL
     echo "Network Monitoring."
-    sar -n DEV 1 1
+    sar -u -r -n DEV 1 1
 '
 ssh $SSH_username@$SSH_server 'sudo apt-get install sysstat -y'
 crontab -l > provCron
