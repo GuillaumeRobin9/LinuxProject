@@ -18,7 +18,7 @@ SMTPPassword=$(echo $4 | sed 's/\!/\\\!/g')
 
 
 #-------------------------------------------------ACCOUNT CREATION----------------------------
-#sed -i 1d accounts.csv # remove first line for Name Surname password etc ..
+sed -i 1d accounts.csv # remove first line for Name Surname password etc ..
 mkdir /home/shared
 chmod +rx /home/shared 
 #loop  for creating user 
@@ -63,7 +63,7 @@ done < accounts.csv
 cat <<EOF >/home/retablir_sauvegarde
 #!/bin/sh
 
-username=$(whoami)
+username=$(whoami) 
 
 # get save from server
 sudo scp -p $SSH_username@$SSH_server:/home/save_$username.tgz /home/$username/a_sauver_$username\save_$username.tgz 2> /dev/null
